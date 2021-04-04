@@ -11,6 +11,9 @@ import secrets  # file that contains your API key
 # Cache required info for each URL --------------------------------------------
 CACHE_FILENAME = "cache.json"
 
+# Load API key ----------------------------------------------------------------
+API_KEY = secrets.API_KEY
+
 
 # Original helper functions ---------------------------------------------------
 def get_soup(url: str):
@@ -283,7 +286,7 @@ def get_nearby_places(site_object):
         print("Fetching")
         baseurl = "http://www.mapquestapi.com/search/v2/radius"
         params = {
-            "key": secrets.API_KEY,
+            "key": API_KEY,
             "origin": zipcode,
             "radius": "10",
             "maxMatches": "10",
@@ -322,7 +325,7 @@ if __name__ == "__main__":
                 if detail == "exit" or detail == "back":
                     break
                 # check invalid input (out of range)
-                elif int(detail) > counter or int(detail) < 1:
+                elif int(detail) > counter - 1 or int(detail) < 1:
                     print("[Error] Invalid input.")
                     continue
                 # pretty-print nearby places
