@@ -1,0 +1,7 @@
+doc/
+__pycache__/
+
+*.csv
+.DS_Store
+secrets*
+cache*
