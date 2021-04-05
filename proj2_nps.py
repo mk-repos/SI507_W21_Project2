@@ -91,7 +91,7 @@ def print_places(place_dict: dict):
         # check and overwrite empty attributes
         for k, v in temp_dict.items():
             if v == "":
-                temp_dict[k] = f"no {k}"
+                temp_dict[k] = f"No {k}"
         print(
             f"- {temp_dict['name']} ({temp_dict['category']}):",
             f"{temp_dict['address']}, {temp_dict['city']}"
@@ -126,11 +126,6 @@ class NationalSite:
         self.address = address
         self.zipcode = zipcode
         self.phone = phone
-
-        # if any attribute is N/A, fill in "No {attribute}"
-        for attr in ["category", "name", "address", "zipcode", "phone"]:
-            if getattr(self, attr) == "" or getattr(self, attr) is None:
-                setattr(self, attr, f"no {attr}")
 
     def info(self):
         return f"{self.name} ({self.category}): {self.address} {self.zipcode}"
@@ -197,25 +192,45 @@ def get_site_instance(site_url):
         # search header area
         headers = soup.find("div", "Hero-titleContainer")
         # collect attributes
-        name = headers.find("a", class_="Hero-title").text
-        category = headers.find("span", class_="Hero-designation").text
+        name = headers.find("a", class_="Hero-title")
+        try:
+            name = name.text.strip()
+        except AttributeError:
+            name = "No name"
+        category = headers.find("span", class_="Hero-designation")
+        try:
+            category = category.text.strip()
+        except AttributeError:
+            category = "No category"
         # search footer area
         footers = soup.find("div", class_="ParkFooter-contact")
         # collect attributes
-        local = footers.find("span", itemprop="addressLocality").text
-        region = footers.find("span", itemprop="addressRegion").text
-        zipcode = footers.find("span", itemprop="postalCode").text.strip()
-        phone = footers.find("span", itemprop="telephone").text.strip()
+        local = footers.find("span", itemprop="addressLocality")
+        region = footers.find("span", itemprop="addressRegion")
+        try:
+            address = f"{local.text.strip()}, {region.text.strip()}"
+        except AttributeError:
+            address = "No address"
+        zipcode = footers.find("span", itemprop="postalCode")
+        try:
+            zipcode = zipcode.text.strip()
+        except AttributeError:
+            zipcode = "No zipcode"
+        phone = footers.find("span", itemprop="telephone")
+        try:
+            phone = phone.text.strip()
+        except AttributeError:
+            phone = "No phone"
         # create instance
         site = NationalSite(category=category,
                             name=name,
-                            address=f"{local}, {region}",
+                            address=address,
                             zipcode=zipcode,
                             phone=phone)
         # update cache
         cache_dict[site_url] = {"category": category,
                                 "name": name,
-                                "address": f"{local}, {region}",
+                                "address": address,
                                 "zipcode": zipcode,
                                 "phone": phone}
         save_cache(cache_dict=cache_dict, filename=CACHE_FILENAME)
