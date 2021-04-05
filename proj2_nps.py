@@ -343,6 +343,10 @@ if __name__ == "__main__":
                 elif int(detail) > counter - 1 or int(detail) < 1:
                     print("[Error] Invalid input.")
                     continue
+                # check if the selected site has zipcode
+                elif sites[int(detail) - 1].zipcode == "No zipcode":
+                    print("[Error] This site does not have location info")
+                    continue
                 # pretty-print nearby places
                 else:
                     place_dict = get_nearby_places(sites[int(detail) - 1])
