@@ -121,6 +121,21 @@ class NationalSite:
         the phone of a national site (e.g. '(616) 319-7906', '307-344-7381')
     '''
     def __init__(self, category, name, address, zipcode, phone):
+        """Initialize NationalSite instance
+
+        Parameters
+        ----------
+        category : str
+            cateogry of the site
+        name : str
+            name of the site
+        address : str
+            address of the site
+        zipcode : str
+            zipcode of the site
+        phone : str
+            phone number of the site
+        """
         self.category = category
         self.name = name
         self.address = address
@@ -128,6 +143,13 @@ class NationalSite:
         self.phone = phone
 
     def info(self):
+        """Print summarized info of the site as a string
+
+        Returns
+        -------
+        str
+            summarized info of the site
+        """
         return f"{self.name} ({self.category}): {self.address} {self.zipcode}"
 
 
